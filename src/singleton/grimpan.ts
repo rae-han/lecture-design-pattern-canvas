@@ -15,6 +15,10 @@ class Grimpan {
     new Grimpan(document.querySelector("canvas"));
   }
 
+  private static hasInstance() {
+    return this.instance !== null;
+  }
+
   static getInstance() {
     if (!this.instance) {
       this.instance = new Grimpan(document.querySelector("canvas"));
