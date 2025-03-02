@@ -1,11 +1,11 @@
-class Grimpan2 {
-  private instance: Grimpan;
+// class Grimpan2 {
+//   private instance: Grimpan2;
 
-  constructor(canvas: HTMLCanvasElement | null) {
-    if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
-      throw new Error("canvas 엘리먼트를 입력하세요");
-    }
-  }
-}
+//   constructor(canvas: HTMLCanvasElement | null) {
+//     if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
+//       throw new Error("canvas 엘리먼트를 입력하세요");
+//     }
+//   }
+// }
 
-export default new Grimpan2(document.querySelector("canvas"));
+// export default new Grimpan2(document.querySelector("canvas"));

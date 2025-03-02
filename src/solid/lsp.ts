@@ -17,7 +17,7 @@ console.log(new Animal().isAnimal()); // true
 console.log(new Bird().fly()); // 파닥파닥
 
 class Penguin extends Bird {
-  override fly() {
-    throw new Error("펭귄은 못날아.");
-  }
+  // override fly() {
+  //   throw new Error("펭귄은 못날아.");
+  // }
 }
