@@ -8,21 +8,10 @@ import Singleton from "./singleton/index.js";
 import Grimpan from "./singleton/grimpan.js";
 import SingletonImport1 from "./singleton/singletonImport1.js";
 import SingletonImport2 from "./singleton/singletonImport2.js";
-import AbstractGrimpanFactory from "./factory/AbstractGrimpanFactory.js";
-import ChromeGrimpan from "./factory/ChromeGrimpan.js";
-import IEGrimpan from "./factory/IEGrimpan.js";
-
-class ChromeGrimpanFactory extends AbstractGrimpanFactory {
-  createGrimpan() {
-    return ChromeGrimpan.getInstance();
-  }
-}
-
-class IEGrimpanFactory extends AbstractGrimpanFactory {
-  createGrimpan() {
-    return IEGrimpan.getInstance();
-  }
-}
+import AbstractGrimpanFactory, {
+  ChromeGrimpanFactory,
+} from "./factory/AbstractGrimpanFactory.js";
+import { ChromeGrimpanHistory } from "./abstract-factory/AbstractGrimpanHistory.js";
 
 function main() {
   // Grimpan.getInstance().initialize();
@@ -54,8 +43,17 @@ function main() {
 
   Grimpan.getInstance().initialize();
 
-  const grimpan = new ChromeGrimpanFactory().createGrimpan();
-  console.log({ grimpan });
+  const factory = ChromeGrimpanFactory;
+
+  const grimpan = factory.createGrimpan();
+  const grimpanMenu = factory.createGrimpanMenu(grimpan);
+  const grimpanHistory = factory.createGrimpanHistory(grimpan);
+
+  grimpan.initialize();
+  grimpanMenu.initialize();
+  grimpanHistory.initialize();
+
+  console.log({ grimpan, grimpanMenu, grimpanHistory });
 }
 
 main();
