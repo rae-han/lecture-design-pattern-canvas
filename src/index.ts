@@ -50,8 +50,17 @@ function main() {
   const grimpanHistory = factory.createGrimpanHistory(grimpan);
 
   grimpan.initialize();
-  grimpanMenu.initialize();
-  grimpanHistory.initialize();
+  grimpanMenu.initialize([
+    "back",
+    "forward",
+    "color",
+    "pipette",
+    "pen",
+    "circle",
+    "rectangle",
+    "eraser",
+    "save",
+  ]);
 
   console.log({ grimpan, grimpanMenu, grimpanHistory });
 }
