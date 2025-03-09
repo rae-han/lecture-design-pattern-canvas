@@ -1,3 +1,5 @@
+import { GrimpanMenu } from "../abstract-factory/AbstractGrimpanMenu";
+
 interface Button {
   name: string;
   type: string;
@@ -13,8 +15,9 @@ interface Input {
 }
 
 class GrimpanMenuBtn {
-  name?: string;
-  type?: string;
+  menu: GrimpanMenu; // menu 추가 부분
+  name: string;
+  type: string;
   onClick?: () => void;
   onChange?: () => void;
   active?: boolean;
@@ -22,20 +25,75 @@ class GrimpanMenuBtn {
 
   constructor(
     // 빌더가 아니면 만질수 없게 private을 붙였다.
-    name?: string,
-    type?: string,
+    menu: GrimpanMenu, // menu 추가 부분
+    name: string,
+    type: string,
     onClick?: () => void,
     onChange?: () => void,
     active?: boolean,
     value?: string | number
   ) {
+    this.menu = menu; // menu 추가 부분
     this.name = name;
     this.type = type;
     this.onClick = onClick;
     this.onChange = onChange;
     this.active = active;
-    this.value = value;
+    this.value = value;   
   }
+
+  draw() {  
+    if (this.type === 'button') {
+      const btn = document.createElement('button');  
+      btn.type = 'button';
+      btn.textContent = this.name;
+      if (this.onClick) {  
+        btn.addEventListener('click', this.onClick.bind(this));
+      }
+      this.menu.dom.append(btn); 
+    } else if (this.type === 'input') {
+      const btn = document.createElement('input');
+      btn.type = 'color';
+      btn.title = this.name;
+      if (this.onChange) {
+        btn.addEventListener('change', this.onChange.bind(this));
+      } 
+      this.menu.dom.append(btn);
+    }
+  }
+
+  static Builder = class GrimpanMenuBtnBuilder {
+    btn: GrimpanMenuBtn;
+
+    constructor(menu: GrimpanMenu, name: string, type: string) {
+      // name과 type은 반드시 있어야 해서 그냥 세터로 안하고 생성자로 옮겼다.
+      this.btn = new GrimpanMenuBtn(menu, name, type); // menu 추가 부분
+    }
+
+    setActive(active: boolean) {
+      this.btn.active = active;
+      return this;
+    }
+
+    setValue(value: string | number) {
+      this.btn.value = value;
+      return this;
+    }
+
+    setOnClick(onClick: () => void) {
+      this.btn.onClick = onClick;
+      return this;
+    }
+
+    setOnChange(onChange: () => void) {
+      this.btn.onChange = onChange;
+      return this;
+    }
+
+    build() {
+      return this.btn;
+    }
+  };
 }
 
 interface GrimpanMenuBtnBuilder {
@@ -51,9 +109,9 @@ interface GrimpanMenuBtnBuilder {
 class ChromeGrimpanMenuBtnBuilder implements GrimpanMenuBtnBuilder {
   btn: GrimpanMenuBtn;
 
-  constructor() {
+  constructor(menu: GrimpanMenu, name: string, type: string) {
     // name과 type은 반드시 있어야 해서 그냥 세터로 안하고 생성자로 옮겼다.
-    this.btn = new GrimpanMenuBtn();
+    this.btn = new GrimpanMenuBtn(menu, name, type);
   }
 
   setName(name: string) {
@@ -94,11 +152,12 @@ class ChromeGrimpanMenuBtnBuilder implements GrimpanMenuBtnBuilder {
 class IEGrimpanMenuBtnBuilder implements GrimpanMenuBtnBuilder {
   btn: GrimpanMenuBtn;
 
-  constructor(name: string, type: string) {
+  constructor(menu: GrimpanMenu, name: string, type: string) {
     // name과 type은 반드시 있어야 해서 그냥 세터로 안하고 생성자로 옮겼다.
-    this.btn = new GrimpanMenuBtn(name, type);
+    this.btn = new GrimpanMenuBtn(menu, name, type);
   }
 
+  
   setName(name: string) {
     this.btn.name = name;
     return this;
@@ -157,8 +216,8 @@ class GrimpanMenuBtnDirector {
 //   new ChromeGrimpanMenuBtnBuilder("뒤로가기", "button")
 // );
 
-GrimpanMenuBtnDirector.createBackBtn(new ChromeGrimpanMenuBtnBuilder());
-GrimpanMenuBtnDirector.createForwardBtn(new ChromeGrimpanMenuBtnBuilder());
+// GrimpanMenuBtnDirector.createBackBtn(new ChromeGrimpanMenuBtnBuilder());
+// GrimpanMenuBtnDirector.createForwardBtn(new ChromeGrimpanMenuBtnBuilder());
 
 // const backBtnBuilder = new GrimpanMenuBtn.Builder(
 //   "뒤로가기",
@@ -168,3 +227,5 @@ GrimpanMenuBtnDirector.createForwardBtn(new ChromeGrimpanMenuBtnBuilder());
 // // 오래 걸리는 작업
 
 // const backBtn = backBtnBuilder.setValue("안녕").build();
+
+export { GrimpanMenuBtn };
